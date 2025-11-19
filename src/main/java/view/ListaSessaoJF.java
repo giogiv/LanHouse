@@ -1,5 +1,6 @@
 package view;
 
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Sessao;
@@ -11,7 +12,7 @@ public class ListaSessaoJF extends javax.swing.JFrame {
 
     public ListaSessaoJF() {
         initComponents();
-        
+
         dao = new SessaoDAO();
         loadSessao();
     }
@@ -149,20 +150,21 @@ public class ListaSessaoJF extends javax.swing.JFrame {
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
         CadastroSessaoJD telaCadastro = new CadastroSessaoJD(this, rootPaneCheckingEnabled);
         telaCadastro.setVisible(true);
-        
+
         Sessao novaSessao = telaCadastro.getSessao();
         try {
             dao.persist(novaSessao);
+            loadSessao();
         } catch (Exception ex) {
-            System.out.println("Erro ao iniciar a sessão "+novaSessao.toString()+" \n Erro: "+ex);
+            System.out.println("Erro ao iniciar a sessão \n Erro: " + ex);
         }
         loadSessao();
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInfoActionPerformed
-        if(tblSessao.getSelectedRow() != -1){
+        if (tblSessao.getSelectedRow() != -1) {
             Sessao obj = (Sessao) tblSessao.getModel().getValueAt(tblSessao.getSelectedRow(), 0);
-            
+
             JOptionPane.showMessageDialog(rootPane, obj.exibirDados());
         } else {
             JOptionPane.showMessageDialog(rootPane, "Selecione uma sessão");
@@ -170,41 +172,44 @@ public class ListaSessaoJF extends javax.swing.JFrame {
     }//GEN-LAST:event_btnInfoActionPerformed
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
-        if(tblSessao.getSelectedRow() != -1){
+        if (tblSessao.getSelectedRow() != -1) {
             Sessao obj = (Sessao) tblSessao.getModel().getValueAt(tblSessao.getSelectedRow(), 0);
-            int op_remover = JOptionPane.showConfirmDialog(rootPane, "Tem certeza que deseja remover "+obj+"?");
-            if(op_remover == JOptionPane.YES_OPTION){
+            int op_remover = JOptionPane.showConfirmDialog(rootPane, "Tem certeza que deseja remover " + obj + "?");
+            if (op_remover == JOptionPane.YES_OPTION) {
                 try {
                     dao.remover(obj);
+                    JOptionPane.showMessageDialog(rootPane, "Sessão removida com sucesso... ");
+                    loadSessao();
                 } catch (Exception ex) {
-                    System.out.println("Erro ao remover sessão "+obj+"\n Erro: "+ex);
+                    System.out.println("Erro ao remover sessão " + obj + "\n Erro: " + ex);
                 }
-                JOptionPane.showMessageDialog(rootPane, "Sessão removida com sucesso... ");
-                loadSessao();
             }
-            
+
         } else {
             JOptionPane.showMessageDialog(rootPane, "Selecione uma sessão");
         }
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        if(tblSessao.getSelectedRow() != -1){
-            Sessao obj = (Sessao) tblSessao.getModel().getValueAt(tblSessao.getSelectedRow(), 0);
+        if (tblSessao.getSelectedRow() != -1) {
+            Sessao obj = (Sessao) tblSessao.getModel().
+                    getValueAt(tblSessao.getSelectedRow(), 0);
+
             CadastroSessaoJD telaEdicao = new CadastroSessaoJD(this, rootPaneCheckingEnabled);
             telaEdicao.setSessao(obj);
-            
+
             telaEdicao.setVisible(true);
-            
-            try {
-                dao.persist(telaEdicao.getSessao());
-            } catch (Exception ex) {
-                System.err.println("Erro ao editar a sessão\n Erro: "+ex);
+
+            Sessao obj_retornado = telaEdicao.getSessao();
+
+            if (obj_retornado != null) {
+                try {
+                    dao.persist(obj_retornado);
+                    loadSessao();
+                } catch (Exception ex) {
+                    System.err.println("Erro ao editar a sessão\n Erro: " + ex);
+                }
             }
-            
-            loadSessao();
-            
-            
         } else {
             JOptionPane.showMessageDialog(rootPane, "Selecione uma sessão");
         }
@@ -251,25 +256,32 @@ public class ListaSessaoJF extends javax.swing.JFrame {
             }
         });
     }
-    
-    public void loadSessao(){
-        
+
+    public void loadSessao() {
+
         // Obtém o modelo da tabela - vincular o que definimos no Desing
         DefaultTableModel modelo = (DefaultTableModel) tblSessao.getModel();
         //limpar as linhas e popular 
         modelo.setNumRows(0);
         
-        for(Sessao obj: dao.listaSessoes()){
+        List<Sessao> sessoes = dao.listaSessoes();
+
+        if (sessoes == null || sessoes.isEmpty()) {
+            System.out.println("AVISO: Nenhuma sessão encontrada ou erro ao buscar do banco!");
+            return;
+        }
+
+        for (Sessao obj : dao.listaSessoes()) {
             Object[] linha = {
-                obj.getCliente(), 
-                    obj.getComputador(), 
-                    obj.getHoraInicio(), 
-                    obj.getHoraFinal(),
-                    obj.getStatus()
-                            };
+                obj.getCliente(),
+                obj.getComputador(),
+                obj.getHoraInicio(),
+                obj.getHoraFinal(),
+                obj.getStatus()
+            };
             modelo.addRow(linha);
         }
-        
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

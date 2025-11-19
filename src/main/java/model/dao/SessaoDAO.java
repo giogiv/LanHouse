@@ -14,8 +14,11 @@ public class SessaoDAO extends PersistenciaJPA {
                     = em.createQuery("SELECT v FROM Sessao v", Sessao.class);
             return query.getResultList();
         } catch (Exception e) {
+            System.err.println("ERRO AO BUSCAR SESSÕES:");
             e.printStackTrace();
             return null;
-        }
+        } finally {
+        em.close(); // IMPORTANTE: Fechar o EntityManager
+    }
     }
 }

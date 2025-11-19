@@ -14,11 +14,9 @@ public class Sessao implements Serializable{
     @Column(name = "sessao_id")
     private int id;
     
-    @ManyToOne
     @Column(name = "sessao_cli")
     private Cliente cliente;
     
-    @ManyToOne
     @Column(name = "sessao_pc")
     private Computador computador;
     
@@ -105,8 +103,8 @@ public class Sessao implements Serializable{
         String aux = "Dados da Sessão:\n";
         aux += "Computador: "+getComputador().getNumeroMaquina()+" ("+getComputador().getStatus()+")"+"\n";
         aux += "Cliente: "+getCliente().getNome()+"\n";
-        aux += "Hora inicio:"+Util.formatarDataHora(horaInicio)+"\n";
-        aux += "Hora final:"+Util.formatarDataHora(horaFinal)+"\n";
+        aux += "Hora inicio:"+Util.formatarHora(horaInicio)+"\n";
+        aux += "Hora final:"+Util.formatarHora(horaFinal)+"\n";
         
         if (this.status == StatusSess.INATIVA && horaFinal != null) {
              aux += "Valor por Hora: R$ " + String.format("%.2f", valorHora) + "\n";

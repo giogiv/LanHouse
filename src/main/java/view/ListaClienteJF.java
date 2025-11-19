@@ -5,7 +5,6 @@ import javax.swing.table.DefaultTableModel;
 import model.Cliente;
 import model.dao.ClienteDAO;
 
-
 public class ListaClienteJF extends javax.swing.JFrame {
 
     ClienteDAO dao;
@@ -126,7 +125,6 @@ public class ListaClienteJF extends javax.swing.JFrame {
         telaCadastro.setVisible(true);
 
         Cliente novo = telaCadastro.getCliente();
-        //JOptionPane.showMessageDialog(rootPane, novoVendedor);
         if (novo != null) {
             try {
                 dao.persist(novo);
@@ -178,20 +176,17 @@ public class ListaClienteJF extends javax.swing.JFrame {
 
             telaEdicao.setVisible(true);
 
-            
             Cliente obj_retornado = telaEdicao.getCliente();
-                    
-        if (obj_retornado != null) {
-            
-            try {
-                dao.persist(obj_retornado);
-                loadTabelaClientes();
-            } catch (Exception ex) {
-                System.err.println("Erro ao editar cliente: " + ex);
-            }
 
-            
-        }
+            if (obj_retornado != null) {
+
+                try {
+                    dao.persist(obj_retornado);
+                    loadTabelaClientes();
+                } catch (Exception ex) {
+                    System.err.println("Erro ao editar cliente: " + ex);
+                }
+            }
         } else {
             JOptionPane.showMessageDialog(rootPane, "Selecione um cliente");
         }

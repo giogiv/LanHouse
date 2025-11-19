@@ -103,8 +103,14 @@ public class PrincipalJF extends javax.swing.JFrame {
     }//GEN-LAST:event_miClienteActionPerformed
 
     private void miSessaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miSessaoActionPerformed
+        try {
         ListaSessaoJF telaSessaoJF = new ListaSessaoJF();
         telaSessaoJF.setVisible(true);
+        System.out.println("Tela de sessão aberta!");
+    } catch (Exception e) {
+        e.printStackTrace();
+        System.out.println("ERRO ao abrir sessão: " + e.getMessage());
+    }
     }//GEN-LAST:event_miSessaoActionPerformed
 
     private void miVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miVendaActionPerformed

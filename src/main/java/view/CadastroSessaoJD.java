@@ -1,6 +1,7 @@
 package view;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import javax.swing.JOptionPane;
@@ -177,10 +178,10 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
             sessao.setCliente((Cliente) cmbCliente.getSelectedItem());
             sessao.setComputador((Computador) cmbComputador.getSelectedItem());
 
-            LocalDateTime horaInicio = LocalDateTime.parse(txtHoraInicio.getText().trim(), formatter);
+            LocalTime horaInicio = LocalTime.parse(txtHoraInicio.getText().trim(), formatter);
             sessao.setHoraInicio(horaInicio);
             if (!txtHoraFim.getText().trim().isEmpty()) {
-                LocalDateTime horaFinal = LocalDateTime.parse(txtHoraFim.getText().trim(), formatter);
+                LocalTime horaFinal = LocalTime.parse(txtHoraFim.getText().trim(), formatter);
                 sessao.setHoraFinal(horaFinal);
                 double valorHora = Double.parseDouble(lblValorHora.getText().trim().replace(",", "."));
                 sessao.setValorHora(valorHora);

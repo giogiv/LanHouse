@@ -1,6 +1,7 @@
 package model.dao;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
 
@@ -13,14 +14,14 @@ public class Util {
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         return data.format(fmt);
     }
-    
-    public static String formatarHora(LocalDateTime hora) {
-        if (hora == null) {
-            return "Sem hora definida";
-        }
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("HH:mm");
-        return hora.format(fmt);
+
+    public static String formatarHora(LocalTime hora) {
+    if (hora == null) {
+        return "Sem hora definida";
     }
+    DateTimeFormatter fmt = DateTimeFormatter.ofPattern("HH:mm");
+    return hora.format(fmt);
+}
 
     public static boolean validaAno(int ano) {
         if (ano >= 2000 && ano <= 2026) {

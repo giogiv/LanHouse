@@ -10,7 +10,6 @@ public class Pessoa {
     private String CPF;
     private LocalDate dataNascimento;
     private String telefone;
-    
     private String email;
     private String endereco;
     private int codigo;

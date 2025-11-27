@@ -25,11 +25,14 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
 
         clienteDAO = new ClienteDAO();
         computadorDAO = new ComputadorDAO();
-                
+        
+        txtHoraInicio.setToolTipText("Formato: HH:mm (Ex: 14:30)");
+        txtHoraFim.setToolTipText("Formato: HH:mm (Ex: 16:45)");
+
         loadClientes();
         loadComputadores();
         loadStatus();
-        
+
         sessao = new Sessao();
     }
 
@@ -182,7 +185,7 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
             sessao = new Sessao();
         }
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
         try {
             sessao.setCliente((Cliente) cmbCliente.getSelectedItem());
@@ -190,13 +193,15 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
 
             LocalTime horaInicio = LocalTime.parse(txtHoraInicio.getText().trim(), formatter);
             sessao.setHoraInicio(horaInicio);
+
             if (!txtHoraFim.getText().trim().isEmpty()) {
                 LocalTime horaFinal = LocalTime.parse(txtHoraFim.getText().trim(), formatter);
                 sessao.setHoraFinal(horaFinal);
+
                 double valorHora = Double.parseDouble(txtValorHora.getText().trim().replace(",", "."));
                 sessao.setValorHora(valorHora);
-                double valorTotalCalculado = sessao.calcularValorTotal();
 
+                double valorTotalCalculado = sessao.calcularValorTotal();
                 sessao.setValorTotal(valorTotalCalculado);
                 sessao.setStatus(StatusSess.INATIVA);
 
@@ -216,7 +221,7 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(rootPane, "Erro de formato. Verifique se o Valor por Hora e o Valor Total estão corretos. Detalhe: \n" + e1);
         } catch (DateTimeParseException e2) {
             sessao = null;
-            JOptionPane.showMessageDialog(rootPane, "Erro de formato. Verifique se as Horas (Início/Fim) estão no formato correto (Ex: dd/MM/yyyy HH:mm). Detalhe: \n" + e2);
+            JOptionPane.showMessageDialog(rootPane, "Erro de formato. Verifique se as Horas (Início/Fim) estão no formato correto (Ex: 14:30).\nDetalhe: \n" + e2);
         } catch (Exception e3) {
             sessao = null;
             JOptionPane.showMessageDialog(rootPane, "Ocorreu um erro inesperado: \n" + e3);
@@ -303,32 +308,32 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
             cmbStatus.addItem(obj.toString());
         }
     }
-    
-    private void loadClientes() {
-    cmbCliente.removeAllItems();
-    List<Cliente> clientes = clienteDAO.listaClientes(); 
-    
-    if (clientes != null && !clientes.isEmpty()) {
-        for (Cliente cliente : clientes) {
-            cmbCliente.addItem(cliente);
-        }
-    } else {
-        System.out.println("AVISO: Nenhum cliente encontrado!");
-    }
-}
 
-private void loadComputadores() {
-    cmbComputador.removeAllItems();
-    List<Computador> computadores = computadorDAO.listaComputadores(); 
-    
-    if (computadores != null && !computadores.isEmpty()) {
-        for (Computador comp : computadores) {
-            cmbComputador.addItem(comp);
+    private void loadClientes() {
+        cmbCliente.removeAllItems();
+        List<Cliente> clientes = clienteDAO.listaClientes();
+
+        if (clientes != null && !clientes.isEmpty()) {
+            for (Cliente cliente : clientes) {
+                cmbCliente.addItem(cliente);
+            }
+        } else {
+            System.out.println("AVISO: Nenhum cliente encontrado!");
         }
-    } else {
-        System.out.println("AVISO: Nenhum computador encontrado!");
     }
-}
+
+    private void loadComputadores() {
+        cmbComputador.removeAllItems();
+        List<Computador> computadores = computadorDAO.listaComputadores();
+
+        if (computadores != null && !computadores.isEmpty()) {
+            for (Computador comp : computadores) {
+                cmbComputador.addItem(comp);
+            }
+        } else {
+            System.out.println("AVISO: Nenhum computador encontrado!");
+        }
+    }
 
     public Sessao getSessao() {
         return sessao;
@@ -339,10 +344,15 @@ private void loadComputadores() {
 
         cmbCliente.setSelectedItem(sessao.getCliente());
         cmbComputador.setSelectedItem(sessao.getComputador());
-        txtHoraFim.setText("" + sessao.getHoraFinal());
-        txtHoraInicio.setText("" + sessao.getHoraInicio());
+        if (sessao.getHoraInicio() != null) {
+            txtHoraInicio.setText(sessao.getHoraInicio().format(DateTimeFormatter.ofPattern("HH:mm")));
+        }
+
+        if (sessao.getHoraFinal() != null) {
+            txtHoraFim.setText(sessao.getHoraFinal().format(DateTimeFormatter.ofPattern("HH:mm")));
+        }
         cmbStatus.setSelectedItem(sessao.getStatus());
-        txtValorHora.setText("" + sessao.getValorTotal());
+        txtValorHora.setText(String.format("%.2f", sessao.getValorHora()));
     }
 
 }

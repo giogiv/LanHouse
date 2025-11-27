@@ -1,9 +1,9 @@
 package model;
 import java.io.Serializable;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import javax.persistence.*;
-import model.dao.Util;
 
 @Entity
 @Table(name = "sessao")
@@ -86,22 +86,27 @@ public class Sessao implements Serializable{
     }
     
     public String exibirDados() {
-        String aux = "Dados da Sessão:\n";
-        aux += "Computador: "+getComputador().getNumeroMaquina()+" ("+getComputador().getStatus()+")"+"\n";
-        aux += "Cliente: "+getCliente().getNome()+"\n";
-        aux += "Hora inicio: "+Util.formatarHora(horaInicio)+"\n";
-        aux += "Hora final: "+Util.formatarHora(horaFinal)+"\n";
-        
-        if (this.status == StatusSess.INATIVA && horaFinal != null) {
-             aux += "Valor por Hora: R$ " + String.format("%.2f", valorHora) + "\n";
-             aux += "Duração: " + calcularDuracaoMinutos() + " minutos\n";
-             aux += "Valor Total Calculado: R$ " + String.format("%.2f", calcularValorTotal()) + "\n";
-        }
-        aux += "Status: "+status+"\n";
-        aux += "Valor total: R$ "+String.format("%.2f", valorTotal)+"\n";
-        
-        return aux;
+    String aux = "Dados da Sessão:\n";
+    aux += "Computador: " + getComputador().getNumeroMaquina() + " (" + getComputador().getStatus() + ")\n";
+    aux += "Cliente: " + getCliente().getNome() + "\n";
+    
+    if (horaInicio != null) {
+        aux += "Hora inicio: " + horaInicio.format(DateTimeFormatter.ofPattern("HH:mm")) + "\n";
     }
+    if (horaFinal != null) {
+        aux += "Hora final: " + horaFinal.format(DateTimeFormatter.ofPattern("HH:mm")) + "\n";
+    }
+    if (this.status == StatusSess.INATIVA && horaFinal != null) {
+         aux += "Valor por Hora: R$ " + String.format("%.2f", valorHora) + "\n";
+         aux += "Duração: " + calcularDuracaoMinutos() + " minutos\n";
+         aux += "Valor Total Calculado: R$ " + String.format("%.2f", calcularValorTotal()) + "\n";
+    }
+    
+    aux += "Status: " + status + "\n";
+    aux += "Valor total: R$ " + String.format("%.2f", valorTotal) + "\n";
+    
+    return aux;
+}
     
     public long calcularDuracaoMinutos(){
         if(horaInicio != null && horaFinal != null){

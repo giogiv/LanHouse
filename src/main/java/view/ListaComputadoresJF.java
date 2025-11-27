@@ -150,30 +150,47 @@ public class ListaComputadoresJF extends javax.swing.JFrame {
 
     private void btnInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInfoActionPerformed
         if (tblComputadores.getSelectedRow() != -1) {
-            Computador obj = (Computador) tblComputadores.getModel().getValueAt(tblComputadores.getSelectedRow(), 0);
+        int numeroMaquina = (Integer) tblComputadores.getModel()
+                .getValueAt(tblComputadores.getSelectedRow(), 0);
+        
+        Computador obj = encontrarComputadorPorNumero(numeroMaquina);
+        
+        if (obj != null) {
             JOptionPane.showMessageDialog(rootPane, obj.exibirDados());
         } else {
-            JOptionPane.showMessageDialog(rootPane, "Selecione um computador");
+            JOptionPane.showMessageDialog(rootPane, "Erro ao encontrar o computador!");
         }
+    } else {
+        JOptionPane.showMessageDialog(rootPane, "Selecione um computador");
+    }
     }//GEN-LAST:event_btnInfoActionPerformed
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
         if (tblComputadores.getSelectedRow() != -1) {
-            Computador obj = (Computador) tblComputadores.getModel().getValueAt(tblComputadores.getSelectedRow(), 0);
-            int op_remover = JOptionPane.showConfirmDialog(rootPane, "Tem certeza que deseja remover " + obj + "?");
+        int numeroMaquina = (Integer) tblComputadores.getModel()
+                .getValueAt(tblComputadores.getSelectedRow(), 0);
+        
+        Computador obj = encontrarComputadorPorNumero(numeroMaquina);
+        
+        if (obj != null) {
+            int op_remover = JOptionPane.showConfirmDialog(rootPane, 
+                    "Tem certeza que deseja remover o computador nº " + numeroMaquina + "?");
             if (op_remover == JOptionPane.YES_OPTION) {
                 try {
                     dao.remover(obj);
+                    JOptionPane.showMessageDialog(rootPane, "Computador removido com sucesso!");
+                    loadComputadores();
                 } catch (Exception ex) {
                     System.err.println("Erro ao remover computador: " + ex);
+                    JOptionPane.showMessageDialog(rootPane, "Erro ao remover: " + ex.getMessage());
                 }
-                JOptionPane.showMessageDialog(rootPane, "Computador removido com sucesso... ");
-                loadComputadores();
             }
-
         } else {
-            JOptionPane.showMessageDialog(rootPane, "Selecione um computador");
+            JOptionPane.showMessageDialog(rootPane, "Erro ao encontrar o computador!");
         }
+    } else {
+        JOptionPane.showMessageDialog(rootPane, "Selecione um computador");
+    }
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
@@ -247,7 +264,6 @@ public class ListaComputadoresJF extends javax.swing.JFrame {
 
     for (Computador computador : dao.listaComputadores()) {
         Object[] linha = {
-            computador,                     
             computador.getNumeroMaquina(),  
             computador.getEspecificacoes(), 
             computador.getStatus()          

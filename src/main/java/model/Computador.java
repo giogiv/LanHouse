@@ -5,19 +5,19 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "computadores")
-public class Computador implements Serializable{
-    
+public class Computador implements Serializable {
+
     @Id
     @Column(name = "pc_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    
+
     @Column(name = "pc_num")
     private int numeroMaquina;
-    
+
     @Column(name = "pc_esp")
     private String especificacoes;
-    
+
     @Enumerated(EnumType.STRING)
     @Column(name = "pc_status")
     private Status status;
@@ -53,13 +53,18 @@ public class Computador implements Serializable{
     public void setStatus(Status status) {
         this.status = status;
     }
-    
+
+    @Override
+    public String toString() {
+        return this.getNumeroMaquina() + " - " + this.getEspecificacoes();
+    }
+
     public String exibirDados() {
         String aux = "Dados da Venda:\n";
-        aux += "Nº da Máquina: "+getNumeroMaquina()+"\n";
-        aux += "Especificações : "+getEspecificacoes()+"\n";
-        aux += "Status: "+status+"\n";
+        aux += "Nº da Máquina: " + getNumeroMaquina() + "\n";
+        aux += "Especificações : " + getEspecificacoes() + "\n";
+        aux += "Status: " + status + "\n";
         return aux;
     }
-    
+
 }

@@ -287,7 +287,7 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
     private javax.swing.JButton btnSalvar;
     private javax.swing.JComboBox<Cliente> cmbCliente;
     private javax.swing.JComboBox<Computador> cmbComputador;
-    private javax.swing.JComboBox<String> cmbStatus;
+    private javax.swing.JComboBox<Status> cmbStatus;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -305,7 +305,7 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
     private void loadStatus() {
         cmbStatus.removeAllItems();
         for (Status obj : Status.values()) {
-            cmbStatus.addItem(obj.toString());
+            cmbStatus.addItem(obj);
         }
     }
 

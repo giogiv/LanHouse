@@ -31,7 +31,7 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
 
         loadClientes();
         loadComputadores();
-        loadStatus();
+        loadStatusSess();
 
         sessao = new Sessao();
     }
@@ -190,13 +190,10 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-
         if (sessao == null) {
             sessao = new Sessao();
         }
-
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-
         try {
             sessao.setCliente((Cliente) cmbCliente.getSelectedItem());
             Computador computadorSelecionado = (Computador) cmbComputador.getSelectedItem();
@@ -216,9 +213,7 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
                 sessao.setValorTotal(valorTotalCalculado);
                 sessao.setStatus(StatusSess.INATIVA);
 
-                txtValorHora.setText(String.format("%.2f", valorTotalCalculado));
-
-                // Libera o pc quando a sessao termina
+                // libera o pc quando a sessao termina
                 computadorSelecionado.setStatus(Status.LIVRE);
                 computadorDAO.persist(computadorSelecionado);
 
@@ -235,15 +230,17 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
             }
 
             this.dispose();
+
         } catch (NumberFormatException e1) {
             sessao = null;
-            JOptionPane.showMessageDialog(rootPane, "Erro de formato. Verifique se o Valor por Hora e o Valor Total estão corretos. Detalhe: \n" + e1);
+            JOptionPane.showMessageDialog(rootPane, "Erro de formato. Verifique se o Valor por Hora está correto.\nDetalhe: " + e1.getMessage());
         } catch (DateTimeParseException e2) {
             sessao = null;
-            JOptionPane.showMessageDialog(rootPane, "Erro de formato. Verifique se as Horas (Início/Fim) estão no formato correto (Ex: 14:30).\nDetalhe: \n" + e2);
+            JOptionPane.showMessageDialog(rootPane, "Erro de formato. Verifique se as Horas (Início/Fim) estão no formato correto (Ex: 14:30).\nDetalhe: " + e2.getMessage());
         } catch (Exception e3) {
             sessao = null;
-            JOptionPane.showMessageDialog(rootPane, "Ocorreu um erro inesperado: \n" + e3);
+            JOptionPane.showMessageDialog(rootPane, "Ocorreu um erro inesperado:\n" + e3.getMessage());
+            e3.printStackTrace();
         }
 
     }//GEN-LAST:event_btnSalvarActionPerformed
@@ -306,7 +303,7 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
     private javax.swing.JButton btnSalvar;
     private javax.swing.JComboBox<Cliente> cmbCliente;
     private javax.swing.JComboBox<Computador> cmbComputador;
-    private javax.swing.JComboBox<Status> cmbStatus;
+    private javax.swing.JComboBox<StatusSess> cmbStatus;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -322,9 +319,9 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
     private javax.swing.JTextField txtValorHora;
     // End of variables declaration//GEN-END:variables
 
-    private void loadStatus() {
+    private void loadStatusSess() {
         cmbStatus.removeAllItems();
-        for (Status obj : Status.values()) {
+        for (StatusSess obj : StatusSess.values()) {
             cmbStatus.addItem(obj);
         }
     }
@@ -395,5 +392,4 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
             }
         }
     }
-
 }

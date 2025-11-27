@@ -13,10 +13,12 @@ public class Sessao implements Serializable{
     @Column(name = "sessao_id")
     private int id;
     
-    @Column(name = "sessao_cli")
+    @ManyToOne
+    @JoinColumn(name = "sessao_cli")
     private Cliente cliente;
     
-    @Column(name = "sessao_pc")
+    @ManyToOne
+    @JoinColumn(name = "sessao_pc")
     private Computador computador;
     
     @Column(name = "sessao_inicio")

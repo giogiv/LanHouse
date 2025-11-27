@@ -18,7 +18,7 @@ public class SessaoDAO extends PersistenciaJPA {
             e.printStackTrace();
             return null;
         } finally {
-        em.close(); // IMPORTANTE: Fechar o EntityManager
+        em.close(); 
     }
     }
 }

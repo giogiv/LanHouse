@@ -1,12 +1,9 @@
 package view;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import javax.swing.JOptionPane;
 import model.Computador;
 import model.Status;
-import model.dao.Util;
 
 public class CadastroComputador extends javax.swing.JDialog {
     private Computador computador;
@@ -17,6 +14,9 @@ public class CadastroComputador extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
        
+        loadStatus();
+        
+        computador = new Computador();
     }
 
     /**
@@ -59,6 +59,12 @@ public class CadastroComputador extends javax.swing.JDialog {
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
+            }
+        });
+
+        cmbStatus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbStatusActionPerformed(evt);
             }
         });
 
@@ -125,10 +131,12 @@ public class CadastroComputador extends javax.swing.JDialog {
         if(computador == null)
             computador = new Computador();
         
-        try{
-
-            this.computador.setEspecificacoes(txtEspec.getText());
-            int maquina = Integer.parseInt(txtMaquina.getText());
+        try{            
+            int maquina = Integer.parseInt(txtMaquina.getText().trim());
+            computador.setNumeroMaquina(maquina);
+            
+            computador.setEspecificacoes(txtEspec.getText().trim());
+            
             computador.setStatus((Status)cmbStatus.getSelectedItem());
             
             this.dispose();
@@ -143,6 +151,10 @@ public class CadastroComputador extends javax.swing.JDialog {
         
         
     }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void cmbStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbStatusActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbStatusActionPerformed
 
     /**
      * @param args the command line arguments
@@ -198,12 +210,19 @@ public class CadastroComputador extends javax.swing.JDialog {
         cmbStatus.setSelectedItem(computador.getStatus());
     }
     
+    private void loadStatus() {
+        cmbStatus.removeAllItems();
+        for (Status obj : Status.values()) {
+            cmbStatus.addItem(obj);
+        }
+    }
+    
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnSalvar;
-    private javax.swing.JComboBox<String> cmbStatus;
+    private javax.swing.JComboBox<Status> cmbStatus;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblEspec;
     private javax.swing.JLabel lblMaquina;

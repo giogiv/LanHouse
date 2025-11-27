@@ -1,25 +1,35 @@
 package view;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import javax.swing.JOptionPane;
 import model.Cliente;
 import model.Computador;
 import model.Sessao;
 import model.Status;
 import model.StatusSess;
+import model.dao.ClienteDAO;
+import model.dao.ComputadorDAO;
 
 public class CadastroSessaoJD extends javax.swing.JDialog {
 
     private Sessao sessao;
+    private ClienteDAO clienteDAO;
+    private ComputadorDAO computadorDAO;
 
     public CadastroSessaoJD(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        loadStatus();
 
+        clienteDAO = new ClienteDAO();
+        computadorDAO = new ComputadorDAO();
+                
+        loadClientes();
+        loadComputadores();
+        loadStatus();
+        
         sessao = new Sessao();
     }
 
@@ -183,7 +193,7 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
             if (!txtHoraFim.getText().trim().isEmpty()) {
                 LocalTime horaFinal = LocalTime.parse(txtHoraFim.getText().trim(), formatter);
                 sessao.setHoraFinal(horaFinal);
-                double valorHora = Double.parseDouble(lblValorHora.getText().trim().replace(",", "."));
+                double valorHora = Double.parseDouble(txtValorHora.getText().trim().replace(",", "."));
                 sessao.setValorHora(valorHora);
                 double valorTotalCalculado = sessao.calcularValorTotal();
 
@@ -270,8 +280,8 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnSalvar;
-    private javax.swing.JComboBox<String> cmbCliente;
-    private javax.swing.JComboBox<String> cmbComputador;
+    private javax.swing.JComboBox<Cliente> cmbCliente;
+    private javax.swing.JComboBox<Computador> cmbComputador;
     private javax.swing.JComboBox<String> cmbStatus;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -293,6 +303,32 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
             cmbStatus.addItem(obj.toString());
         }
     }
+    
+    private void loadClientes() {
+    cmbCliente.removeAllItems();
+    List<Cliente> clientes = clienteDAO.listaClientes(); 
+    
+    if (clientes != null && !clientes.isEmpty()) {
+        for (Cliente cliente : clientes) {
+            cmbCliente.addItem(cliente);
+        }
+    } else {
+        System.out.println("AVISO: Nenhum cliente encontrado!");
+    }
+}
+
+private void loadComputadores() {
+    cmbComputador.removeAllItems();
+    List<Computador> computadores = computadorDAO.listaComputadores(); 
+    
+    if (computadores != null && !computadores.isEmpty()) {
+        for (Computador comp : computadores) {
+            cmbComputador.addItem(comp);
+        }
+    } else {
+        System.out.println("AVISO: Nenhum computador encontrado!");
+    }
+}
 
     public Sessao getSessao() {
         return sessao;
@@ -304,7 +340,7 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
         cmbCliente.setSelectedItem(sessao.getCliente());
         cmbComputador.setSelectedItem(sessao.getComputador());
         txtHoraFim.setText("" + sessao.getHoraFinal());
-        txtHoraInicio.setText("" + sessao.getHoraFinal());
+        txtHoraInicio.setText("" + sessao.getHoraInicio());
         cmbStatus.setSelectedItem(sessao.getStatus());
         txtValorHora.setText("" + sessao.getValorTotal());
     }

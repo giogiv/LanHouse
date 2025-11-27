@@ -31,12 +31,12 @@ public class ListaComputadoresJF extends javax.swing.JFrame {
         btnEditar = new javax.swing.JButton();
         btnRemover = new javax.swing.JButton();
         btnInfo = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         tblComputadores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
                 {null, null, null},
                 {null, null, null},
                 {null, null, null}
@@ -90,36 +90,42 @@ public class ListaComputadoresJF extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("Lista de Computadores");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 422, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnNovo)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnEditar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnRemover)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnInfo)))
-                .addContainerGap(19, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(22, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(btnNovo)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnEditar)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnRemover)
+                            .addGap(41, 41, 41)
+                            .addComponent(btnInfo))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 422, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(21, 21, 21))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(23, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnNovo)
                     .addComponent(btnEditar)
                     .addComponent(btnRemover)
                     .addComponent(btnInfo))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addGap(12, 12, 12))
         );
 
         pack();
@@ -147,7 +153,7 @@ public class ListaComputadoresJF extends javax.swing.JFrame {
             Computador obj = (Computador) tblComputadores.getModel().getValueAt(tblComputadores.getSelectedRow(), 0);
             JOptionPane.showMessageDialog(rootPane, obj.exibirDados());
         } else {
-            JOptionPane.showMessageDialog(rootPane, "Selecione um funcionário");
+            JOptionPane.showMessageDialog(rootPane, "Selecione um computador");
         }
     }//GEN-LAST:event_btnInfoActionPerformed
 
@@ -159,23 +165,27 @@ public class ListaComputadoresJF extends javax.swing.JFrame {
                 try {
                     dao.remover(obj);
                 } catch (Exception ex) {
-                    System.err.println("Erro ao remover funcionário: " + ex);
+                    System.err.println("Erro ao remover computador: " + ex);
                 }
-                JOptionPane.showMessageDialog(rootPane, "Funcionário removido com sucesso... ");
+                JOptionPane.showMessageDialog(rootPane, "Computador removido com sucesso... ");
                 loadComputadores();
             }
 
         } else {
-            JOptionPane.showMessageDialog(rootPane, "Selecione um funcionário");
+            JOptionPane.showMessageDialog(rootPane, "Selecione um computador");
         }
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         if (tblComputadores.getSelectedRow() != -1) {
-            Computador obj = (Computador) tblComputadores.getModel().getValueAt(tblComputadores.getSelectedRow(), 0);
+        int numeroMaquina = (Integer) tblComputadores.getModel()
+                .getValueAt(tblComputadores.getSelectedRow(), 0);
+        
+        Computador obj = encontrarComputadorPorNumero(numeroMaquina);
+        
+        if (obj != null) {
             CadastroComputador telaEdicao = new CadastroComputador(this, rootPaneCheckingEnabled);
             telaEdicao.setComputador(obj);
-
             telaEdicao.setVisible(true);
 
             Computador obj_retorno = telaEdicao.getComputador();
@@ -187,10 +197,10 @@ public class ListaComputadoresJF extends javax.swing.JFrame {
                     System.out.println("Erro ao editar computador: " + ex);
                 }
             }
-
-        } else {
-            JOptionPane.showMessageDialog(rootPane, "Selecione um computador");
         }
+    } else {
+        JOptionPane.showMessageDialog(rootPane, "Selecione um computador");
+    }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     /**
@@ -232,29 +242,35 @@ public class ListaComputadoresJF extends javax.swing.JFrame {
     }
 
     public void loadComputadores() {
+    DefaultTableModel modelo = (DefaultTableModel) tblComputadores.getModel();
+    modelo.setNumRows(0);
 
-        // Obtém o modelo da tabela - vincular o que definimos no Desing
-        DefaultTableModel modelo = (DefaultTableModel) tblComputadores.getModel();
-        //limpar as linhas e popular 
-        modelo.setNumRows(0);
-
-        for (Computador computador : dao.listaComputadores()) {
-            Object[] linha = {
-                computador,
-                computador.getNumeroMaquina(),
-                computador.getEspecificacoes(),
-                computador.getStatus()
-            };
-            modelo.addRow(linha);
-        }
-
+    for (Computador computador : dao.listaComputadores()) {
+        Object[] linha = {
+            computador,                     
+            computador.getNumeroMaquina(),  
+            computador.getEspecificacoes(), 
+            computador.getStatus()          
+        };
+        modelo.addRow(linha);
     }
+}
+    private Computador encontrarComputadorPorNumero(int numeroMaquina) {
+    for (Computador comp : dao.listaComputadores()) {
+        if (comp.getNumeroMaquina() == numeroMaquina) {
+            return comp;
+        }
+    }
+    return null;
+}
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnInfo;
     private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnRemover;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblComputadores;
     // End of variables declaration//GEN-END:variables

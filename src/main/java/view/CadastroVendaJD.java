@@ -2,14 +2,13 @@ package view;
 
 import java.time.*;
 import java.time.format.*;
+import java.util.List;
 import javax.swing.JOptionPane;
-import model.Cliente;
 import model.*;
 import model.dao.*;
 
 public class CadastroVendaJD extends javax.swing.JDialog {
 
-    ClienteDAO daoCliente;
     ComputadorDAO daoComputador;
     FuncionarioDAO daoFuncionario;
     SessaoDAO daoSessao;
@@ -22,39 +21,41 @@ public class CadastroVendaJD extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        daoCliente = new ClienteDAO();
         daoSessao = new SessaoDAO();
         daoFuncionario = new FuncionarioDAO();
+        daoComputador = new ComputadorDAO();
         
         loadFormaPgto();        
-        loadClientes();
         loadFuncionarios();
-        loadComputador();
+        loadSessoesAtivas();
         
         txtDataVenda.setText(LocalDateTime.now().format(formatter)); 
     }
     
     public void loadFormaPgto(){
+        cmbFormaPgto.removeAllItems();
         for(FormaPgto obj: FormaPgto.values()){
             cmbFormaPgto.addItem(obj);
         }
     }
-    
-    public void loadClientes(){
-        for(Cliente obj: daoCliente.listaClientes()){
-            cmbCliente.addItem(obj);
-        }
-    }
 
     public void loadFuncionarios(){
+        cmbFuncionario.removeAllItems();
         for(Funcionario obj: daoFuncionario.listaFuncionarios()){
             cmbFuncionario.addItem(obj);
         }
     }
 
-    public void loadComputador(){
-        for(Computador obj: daoComputador.listaComputadores()){
-            cmbComputador.addItem(obj);
+    public void loadSessoesAtivas(){
+        cmbSessao.removeAllItems();
+        List<Sessao> sessoes = daoSessao.listaSessoes();
+        
+        if (sessoes != null && !sessoes.isEmpty()) {
+            for(Sessao obj: sessoes){
+                if(obj.getStatus() == StatusSess.ATIVA){
+                    cmbSessao.addItem(obj);
+                }
+            }
         }
     }
 
@@ -69,11 +70,9 @@ public class CadastroVendaJD extends javax.swing.JDialog {
         txtValor = new javax.swing.JTextField();
         lblFormaPagamento = new javax.swing.JLabel();
         cmbFormaPgto = new javax.swing.JComboBox<>();
-        cmbCliente = new javax.swing.JComboBox<>();
-        cmbComputador = new javax.swing.JComboBox<>();
+        cmbSessao = new javax.swing.JComboBox<>();
         cmbFuncionario = new javax.swing.JComboBox<>();
-        lblCliente = new javax.swing.JLabel();
-        lblVeiculo = new javax.swing.JLabel();
+        lblsessao = new javax.swing.JLabel();
         lblVendedor = new javax.swing.JLabel();
         btnSalvar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
@@ -89,15 +88,13 @@ public class CadastroVendaJD extends javax.swing.JDialog {
 
         lblFormaPagamento.setText("Forma de Pagamento:");
 
-        cmbComputador.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cmbComputadorItemStateChanged(evt);
+        cmbSessao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbSessaoActionPerformed(evt);
             }
         });
 
-        lblCliente.setText("Cliente:");
-
-        lblVeiculo.setText("Computador:");
+        lblsessao.setText("Sessão:");
 
         lblVendedor.setText("Funcionario:");
 
@@ -121,66 +118,63 @@ public class CadastroVendaJD extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(lblValor)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(4, 4, 4)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(lblCliente)
-                                .addComponent(lblVeiculo)
-                                .addComponent(lblVendedor)
-                                .addComponent(lblFormaPagamento))
-                            .addGap(18, 18, 18)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(cmbFuncionario, javax.swing.GroupLayout.Alignment.TRAILING, 0, 168, Short.MAX_VALUE)
-                                .addComponent(cmbComputador, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(cmbCliente, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(cmbFormaPgto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(jLabel1)
-                            .addGap(33, 33, 33))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(lblDtVenda)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(txtDataVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(btnCancelar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
-                        .addComponent(btnSalvar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
+                    .addComponent(btnSalvar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblValor)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblsessao)
+                                    .addComponent(lblDtVenda)
+                                    .addComponent(lblVendedor))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cmbSessao, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtDataVenda)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(cmbFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(lblFormaPagamento)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cmbFormaPgto, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(jLabel1)
-                .addGap(31, 31, 31)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblDtVenda)
                     .addComponent(txtDataVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblValor)
-                    .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblFormaPagamento)
-                    .addComponent(cmbFormaPgto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblCliente))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cmbComputador, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblVeiculo, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(cmbSessao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblsessao))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblVendedor))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblValor)
+                    .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblFormaPagamento)
+                    .addComponent(cmbFormaPgto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, Short.MAX_VALUE)
                 .addComponent(btnSalvar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -196,29 +190,43 @@ public class CadastroVendaJD extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        
-        
         try {
             if(venda == null)
                 venda = new Venda();
+            
+            if (txtValor.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Calcule o valor antes de salvar!", "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            if (cmbSessao.getSelectedItem() == null) {
+                JOptionPane.showMessageDialog(this, "Selecione uma sessão!", "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
                         
-            double valor = Double.parseDouble(txtValor.getText()
-                    .replace(",", "."));
+            double valor = Double.parseDouble(txtValor.getText().replace(",", "."));
             LocalDateTime dataVenda = LocalDateTime.parse(txtDataVenda.getText(), formatter);
+
+            Sessao sessaoSelecionada = (Sessao) cmbSessao.getSelectedItem();
+            
+            // Atualiza a sessão para INATIVA e salva o valor total
+            sessaoSelecionada.setStatus(StatusSess.INATIVA);
+            sessaoSelecionada.setValorTotal(valor);
+            daoSessao.persist(sessaoSelecionada);
+            
+            // Libera o computador
+            Computador pc = sessaoSelecionada.getComputador();
+            pc.setStatus(Status.LIVRE);
+            daoComputador.persist(pc);
 
             venda.setValorVenda(valor);
             venda.setDataVenda(dataVenda);
             venda.setFormaPgto((FormaPgto) cmbFormaPgto.getSelectedItem());
-            venda.setCliente((Cliente) cmbCliente.getSelectedItem());
+            venda.setSessao((Sessao) cmbSessao.getSelectedItem());
             venda.setFuncionario((Funcionario) cmbFuncionario.getSelectedItem());
-            venda.setComputador((Computador) cmbComputador.getSelectedItem());
-
-            //venda.getComputador().setDisponivel(false);
-            
-            daoComputador.persist(venda.getComputador());
+            venda.setComputador(sessaoSelecionada.getComputador());
             
             this.dispose();
-
 
         } catch (NumberFormatException e) {
             venda = null;
@@ -229,12 +237,50 @@ public class CadastroVendaJD extends javax.swing.JDialog {
         } catch (Exception e) {
             venda = null;
             JOptionPane.showMessageDialog(this, "Erro ao salvar venda: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
 
-    private void cmbComputadorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbComputadorItemStateChanged
+    private void cmbSessaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSessaoActionPerformed
+        if (cmbSessao.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(this, "Selecione uma sessão!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
-    }//GEN-LAST:event_cmbComputadorItemStateChanged
+        Sessao sessaoSelecionada = (Sessao) cmbSessao.getSelectedItem();
+        
+        // Define a hora final como agora
+        LocalTime horaFinal = LocalTime.now();
+        sessaoSelecionada.setHoraFinal(horaFinal);
+        
+        // Calcula o valor total
+        double valorCalculado = sessaoSelecionada.calcularValorTotal();
+        
+        if (valorCalculado > 0) {
+            txtValor.setText(String.format("%.2f", valorCalculado));
+            
+            // Exibe informações da sessão
+            long minutos = sessaoSelecionada.calcularDuracaoMinutos();
+            String info = String.format(
+                "Sessão calculada:\n" +
+                "Início: %s\n" +
+                "Fim: %s\n" +
+                "Duração: %d minutos (%.2f horas)\n" +
+                "Valor/hora: R$ %.2f\n" +
+                "Valor Total: R$ %.2f",
+                sessaoSelecionada.getHoraInicio().format(DateTimeFormatter.ofPattern("HH:mm")),
+                horaFinal.format(DateTimeFormatter.ofPattern("HH:mm")),
+                minutos,
+                minutos / 60.0,
+                sessaoSelecionada.getValorHora(),
+                valorCalculado
+            );
+            
+            JOptionPane.showMessageDialog(this, info, "Valor Calculado", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Erro ao calcular o valor da sessão!", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_cmbSessaoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -283,17 +329,15 @@ public class CadastroVendaJD extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnSalvar;
-    private javax.swing.JComboBox<Cliente> cmbCliente;
-    private javax.swing.JComboBox<model.Computador> cmbComputador;
     private javax.swing.JComboBox<FormaPgto> cmbFormaPgto;
     private javax.swing.JComboBox<model.Funcionario> cmbFuncionario;
+    private javax.swing.JComboBox<Sessao> cmbSessao;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel lblCliente;
     private javax.swing.JLabel lblDtVenda;
     private javax.swing.JLabel lblFormaPagamento;
     private javax.swing.JLabel lblValor;
-    private javax.swing.JLabel lblVeiculo;
     private javax.swing.JLabel lblVendedor;
+    private javax.swing.JLabel lblsessao;
     private javax.swing.JTextField txtDataVenda;
     private javax.swing.JTextField txtValor;
     // End of variables declaration//GEN-END:variables
@@ -306,8 +350,7 @@ public class CadastroVendaJD extends javax.swing.JDialog {
         this.venda = venda;
         txtDataVenda.setText(venda.getDataVenda().format(formatter));
         txtValor.setText(""+venda.getValorVenda());
-        cmbCliente.setSelectedItem(venda.getCliente());
-        cmbComputador.setSelectedItem(venda.getComputador());
+        cmbSessao.setSelectedItem(venda.getSessao());
         cmbFuncionario.setSelectedItem(venda.getFuncionario());
         cmbFormaPgto.setSelectedItem(venda.getFormaPgto());
     }

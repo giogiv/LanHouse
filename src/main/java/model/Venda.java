@@ -34,6 +34,10 @@ public class Venda implements Serializable{
     @ManyToOne
     @JoinColumn(name = "venda_pc")
     private Computador computador;
+    
+    @ManyToOne
+    @JoinColumn(name = "venda_sessao")
+    private Sessao sessao;
 
     @Override
     public String toString() {
@@ -45,6 +49,7 @@ public class Venda implements Serializable{
         aux += "Data|Hora :"+Util.formatarDataHora(dataVenda)+"\n";
         aux += "Computador: "+getComputador().getNumeroMaquina()+"\n";
         aux += "Cliente: "+getCliente().getNome()+"\n";
+        aux += "Sessão: "+getSessao().getStatus()+"\n";
         aux += "Funcionario: "+getFuncionario().getNome()+"\n";
         aux += "Forma de Pagamento: "+formaPgto+"\n";
         aux += "Valor da Venda: "+valorVenda+"\n";
@@ -105,5 +110,13 @@ public class Venda implements Serializable{
 
     public void setComputador(Computador computador) {
         this.computador = computador;
+    }
+
+    public Sessao getSessao() {
+        return sessao;
+    }
+
+    public void setSessao(Sessao sessao) {
+        this.sessao = sessao;
     }
 }

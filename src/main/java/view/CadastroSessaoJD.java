@@ -25,7 +25,7 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
 
         clienteDAO = new ClienteDAO();
         computadorDAO = new ComputadorDAO();
-        
+
         txtHoraInicio.setToolTipText("Formato: HH:mm (Ex: 14:30)");
         txtHoraFim.setToolTipText("Formato: HH:mm (Ex: 16:45)");
 
@@ -62,6 +62,7 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
         cmbCliente = new javax.swing.JComboBox<>();
         cmbComputador = new javax.swing.JComboBox<>();
         cmbStatus = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
 
         jLabel7.setText("Ano Fabricação");
 
@@ -101,6 +102,9 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
 
         jLabel8.setText("Hora Final");
 
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 3, 8)); // NOI18N
+        jLabel4.setText("Obs: Somente insira a hora final ao final da sessão!");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -114,27 +118,31 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
                         .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblValorHora)
+                            .addComponent(lblNome)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel5)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel3)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblNome)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel5))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtHoraInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtHoraFim, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(cmbComputador, javax.swing.GroupLayout.Alignment.LEADING, 0, 192, Short.MAX_VALUE)
-                                        .addComponent(cmbCliente, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(cmbStatus, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(txtValorHora, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)))))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap(16, Short.MAX_VALUE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(jLabel8)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                                    .addComponent(txtHoraFim, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(jLabel3)
+                                    .addGap(33, 33, 33)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(txtHoraInicio, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                                        .addComponent(cmbComputador, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(cmbCliente, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(cmbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(lblValorHora)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(txtValorHora, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 9, Short.MAX_VALUE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -153,19 +161,21 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtHoraInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(7, 7, 7)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(txtHoraFim, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblValorHora)
-                    .addComponent(txtValorHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtValorHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblValorHora))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(cmbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar)
                     .addComponent(btnCancelar))
@@ -189,7 +199,8 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
 
         try {
             sessao.setCliente((Cliente) cmbCliente.getSelectedItem());
-            sessao.setComputador((Computador) cmbComputador.getSelectedItem());
+            Computador computadorSelecionado = (Computador) cmbComputador.getSelectedItem();
+            sessao.setComputador(computadorSelecionado);
 
             LocalTime horaInicio = LocalTime.parse(txtHoraInicio.getText().trim(), formatter);
             sessao.setHoraInicio(horaInicio);
@@ -207,12 +218,20 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
 
                 txtValorHora.setText(String.format("%.2f", valorTotalCalculado));
 
+                // Libera o pc quando a sessao termina
+                computadorSelecionado.setStatus(Status.LIVRE);
+                computadorDAO.persist(computadorSelecionado);
+
             } else {
                 sessao.setValorTotal(0.0);
                 sessao.setStatus(StatusSess.ATIVA);
 
-                double valorHora = Double.parseDouble(lblValorHora.getText().trim().replace(",", "."));
+                double valorHora = Double.parseDouble(txtValorHora.getText().trim().replace(",", "."));
                 sessao.setValorHora(valorHora);
+
+                // ocupa o pc quando a sessao inicia
+                computadorSelecionado.setStatus(Status.OCUPADO);
+                computadorDAO.persist(computadorSelecionado);
             }
 
             this.dispose();
@@ -291,6 +310,7 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -328,7 +348,9 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
 
         if (computadores != null && !computadores.isEmpty()) {
             for (Computador comp : computadores) {
-                cmbComputador.addItem(comp);
+                if (comp.getStatus() == Status.LIVRE) {
+                    cmbComputador.addItem(comp);
+                }
             }
         } else {
             System.out.println("AVISO: Nenhum computador encontrado!");
@@ -343,7 +365,11 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
         this.sessao = sessao;
 
         cmbCliente.setSelectedItem(sessao.getCliente());
+
+        //recarrega os computadores, ate os que já estao na sessão
+        loadComputadoresParaEdicao(sessao.getComputador());
         cmbComputador.setSelectedItem(sessao.getComputador());
+
         if (sessao.getHoraInicio() != null) {
             txtHoraInicio.setText(sessao.getHoraInicio().format(DateTimeFormatter.ofPattern("HH:mm")));
         }
@@ -353,6 +379,21 @@ public class CadastroSessaoJD extends javax.swing.JDialog {
         }
         cmbStatus.setSelectedItem(sessao.getStatus());
         txtValorHora.setText(String.format("%.2f", sessao.getValorHora()));
+    }
+
+    // carregar computadores ao editar
+    private void loadComputadoresParaEdicao(Computador computadorAtual) {
+        cmbComputador.removeAllItems();
+        List<Computador> computadores = computadorDAO.listaComputadores();
+
+        if (computadores != null && !computadores.isEmpty()) {
+            for (Computador comp : computadores) {
+                // se estiver disponível ou se for o computador atual ele adiciona
+                if (comp.getStatus() == Status.LIVRE || comp.getId().equals(computadorAtual.getId())) {
+                    cmbComputador.addItem(comp);
+                }
+            }
+        }
     }
 
 }
